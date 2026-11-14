@@ -8,6 +8,9 @@
 kaggle/output/
 scripts/__pycache__/
 
+# bridge config (contains session key + HF token)
+kaggle/bridge.local.json
+
 # kaggle credentials — never commit these
 kaggle.json
 .kaggle/

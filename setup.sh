@@ -43,7 +43,10 @@ if [ -d .git ]; then
     echo "[setup] pre-commit installed (notebook outputs are stripped automatically on commit)."
 fi
 
-# 5. connectivity + access check
+# 5. local bridge kernel (cell-by-cell execution on Kaggle)
+python3 scripts/kg.py bridge install || echo "(bridge install skipped — run it after 'kg.py bridge init')"
+
+# 6. connectivity + access check
 echo "[setup] checking kernel access ..."
 if python3 scripts/kg.py status; then
     echo "[setup] OK — you can access the shared kernel."

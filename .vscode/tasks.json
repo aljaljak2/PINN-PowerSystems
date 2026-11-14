@@ -39,6 +39,33 @@
             "type": "shell",
             "command": "python3 ${workspaceFolder}/scripts/kg.py logs --tail 200",
             "problemMatcher": []
+        },
+        {
+            "label": "Kaggle: Bridge Start",
+            "detail": "Start the interactive bridge worker on Kaggle (cell-by-cell execution)",
+            "type": "shell",
+            "command": "python3 ${workspaceFolder}/scripts/kg.py bridge start",
+            "problemMatcher": []
+        },
+        {
+            "label": "Kaggle: Bridge Stop",
+            "detail": "Stop the bridge worker and free the Kaggle session",
+            "type": "shell",
+            "command": "python3 ${workspaceFolder}/scripts/kg.py bridge stop",
+            "problemMatcher": []
+        },
+        {
+            "label": "Kaggle: Bridge Status",
+            "type": "shell",
+            "command": "python3 ${workspaceFolder}/scripts/kg.py bridge status",
+            "problemMatcher": []
+        },
+        {
+            "label": "Kaggle: Bridge Selftest",
+            "detail": "Offline end-to-end test of the bridge (no network needed)",
+            "type": "shell",
+            "command": "python3 ${workspaceFolder}/scripts/kg.py bridge selftest",
+            "problemMatcher": []
         }
     ]
 }

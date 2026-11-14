@@ -134,6 +134,60 @@ kg run --force                   # push even though the kernel source drifted
 > **Note:** the very first `pull` on any given run may need a small delay after
 > the run completes — artifacts appear as soon as Kaggle finalizes them.
 
+### Interactive bridge: exec one cell at a time on Kaggle
+
+`kg run` is *headless and stateless* — every push re-executes the whole
+notebook. For real development you want to edit one cell and execute just
+that cell, with **variables persisting between cells**. The bridge gives you
+exactly that: VS Code sees a normal kernel called **Kaggle Bridge (LosPollos)**
+that actually lives on Kaggle.
+
+**One-time setup:**
+
+```bash
+python3 scripts/kg.py bridge init       # asks for an HF token, creates a private HF dataset repo
+python3 scripts/kg.py bridge install    # registers the local kernel (already done by setup.sh)
+python3 scripts/kg.py bridge selftest   # optional: offline end-to-end check
+```
+
+`bridge init` needs a Hugging Face token (<https://huggingface.co/settings/tokens>,
+"read" is enough) because the bridge queues cells/results through a **private**
+HF dataset repo. The same token must exist as a Kaggle secret named `HF_TOKEN`
+(Add-ons → Secrets) — the notebook already uses one.
+
+**Every work session:**
+
+```bash
+python3 scripts/kg.py bridge start      # pushes & starts the worker (CPU, idle-exits after 30 min)
+python3 scripts/kg.py bridge status     # check the heartbeat
+python3 scripts/kg.py bridge stop       # when done — frees the Kaggle session
+```
+
+Then in VS Code: kernel picker → **Kaggle Bridge (LosPollos)** → Shift+Enter
+runs the cell *on Kaggle* and shows outputs inline. Variables, imports and
+trained models persist across cells, so you can iterate on one cell without
+re-running the world.
+
+**How it works:** the worker is a loop running inside a Kaggle kernel that
+polls the private HF repo for queued cells, executes them in the live kernel's
+namespace (full IPython semantics: magics, `display()`, last-expression
+results, tracebacks), and writes outputs back. Heartbeats keep the session
+alive and let the local kernel detect a dead worker.
+
+**Caveats (read once):**
+
+- The bridge run occupies a Kaggle session — **CPU by default**. Start it on
+  GPU (`bridge start --gpu`) only while you're interactively training.
+- The worker idle-exits after 30 min without cells (configurable with
+  `--idle-minutes`); the local kernel then tells you to restart it.
+- One bridge at a time; cells run to completion — a hung cell needs
+  `bridge stop` + `bridge start`.
+- ipywidgets and interrupts are not supported yet; very long-running cells
+  return only when finished (no live streaming mid-cell).
+- Alternative mode: `python3 scripts/kg.py bridge remote` prints the worker
+  cells to paste into a live session in the Kaggle web editor — useful when
+  you want the bridge inside a browser session instead of a pushed run.
+
 ### Team etiquette
 
 All four collaborators push to **one shared kernel**. Kaggle pushes are
@@ -202,10 +256,15 @@ any official API for executed notebook outputs.
 ```
 lospollos.ipynb              the notebook (code + your local outputs)
 kaggle/kernel-metadata.json  shared kernel definition (committed)
+kaggle/bridge.local.json     bridge config: HF repo, session key, token (gitignored)
 kaggle/output/               pulled logs & artifacts (gitignored)
-scripts/kg.py                the sync CLI
+scripts/kg.py                the sync CLI (+ bridge subcommands)
+scripts/kgbridge_kernel.py   local Jupyter kernel: "Kaggle Bridge (LosPollos)"
+scripts/kgbridge_transport.py shared HF transport for kernel & worker
+scripts/kg_worker_template.py the worker-cell template
+scripts/kgbridge_fake.py     offline fake transport for `bridge selftest`
 scripts/nbstrip_local.py     pre-commit hook: strip outputs (stdlib-only)
 setup.sh                     collaborator bootstrap
 .vscode/tasks.json           Ctrl+Shift+B etc. (committed)
-.gitignore                   keeps outputs and secrets out of git
+.gitignore                   keeps outputs, configs and secrets out of git
 ```
