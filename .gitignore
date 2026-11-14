@@ -16,3 +16,4 @@ kaggle.json
 .kaggle/
 access_token
 credentials.json
+kaggle/*
