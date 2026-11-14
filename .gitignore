@@ -7,3 +7,9 @@
 # kaggle tooling artifacts
 kaggle/output/
 scripts/__pycache__/
+
+# kaggle credentials — never commit these
+kaggle.json
+.kaggle/
+access_token
+credentials.json
