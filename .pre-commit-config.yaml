@@ -1,0 +1,13 @@
+# Keep cell outputs out of git: results live locally and on Kaggle,
+# and a stripped notebook diffs cleanly between collaborators.
+#
+# Local hook (stdlib-only) instead of the remote nbstripout hook, because
+# network-based hooks break when git rewrites github https→ssh URLs.
+repos:
+  - repo: local
+    hooks:
+      - id: strip-notebook-outputs
+        name: strip notebook outputs (clean diffs for the team)
+        entry: python3 scripts/nbstrip_local.py
+        language: system
+        files: \.ipynb$

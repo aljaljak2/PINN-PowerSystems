@@ -1,0 +1,18 @@
+{
+    "id": "tarikhastor/lospollos",
+    "title": "LosPollos",
+    "code_file": "lospollos.ipynb",
+    "language": "python",
+    "kernel_type": "notebook",
+    "is_private": true,
+    "enable_gpu": true,
+    "enable_tpu": false,
+    "enable_internet": true,
+    "keywords": [],
+    "dataset_sources": [],
+    "kernel_sources": [],
+    "competition_sources": [],
+    "model_sources": [],
+    "docker_image": "gcr.io/kaggle-images/python@sha256:0717e81990be591f8c5f98f033d29ab23e9ffde057e5b3a6bd4371f93969e962",
+    "machine_shape": "NvidiaTeslaT4"
+}

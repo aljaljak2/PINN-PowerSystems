@@ -1,0 +1,44 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Kaggle: Push & Run & Pull",
+            "detail": "Push notebook to the shared Kaggle kernel, wait for the run, merge results back locally",
+            "type": "shell",
+            "command": "python3 ${workspaceFolder}/scripts/kg.py run",
+            "group": { "kind": "build", "isDefault": true },
+            "problemMatcher": []
+        },
+        {
+            "label": "Kaggle: Push (save without run)",
+            "type": "shell",
+            "command": "python3 ${workspaceFolder}/scripts/kg.py push --no-run",
+            "problemMatcher": []
+        },
+        {
+            "label": "Kaggle: Pull Results",
+            "type": "shell",
+            "command": "python3 ${workspaceFolder}/scripts/kg.py pull",
+            "problemMatcher": []
+        },
+        {
+            "label": "Kaggle: Watch Run",
+            "type": "shell",
+            "command": "python3 ${workspaceFolder}/scripts/kg.py watch",
+            "problemMatcher": []
+        },
+        {
+            "label": "Kaggle: Sync Check",
+            "detail": "Compare local notebook against the kernel's current source (prevents clobbering collaborators)",
+            "type": "shell",
+            "command": "python3 ${workspaceFolder}/scripts/kg.py sync",
+            "problemMatcher": []
+        },
+        {
+            "label": "Kaggle: Show Log",
+            "type": "shell",
+            "command": "python3 ${workspaceFolder}/scripts/kg.py logs --tail 200",
+            "problemMatcher": []
+        }
+    ]
+}

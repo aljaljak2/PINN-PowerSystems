@@ -1,1 +1,9 @@
 .vscode/*
+# --- but share the project tooling files with collaborators
+!/.vscode/tasks.json
+!/.vscode/settings.json
+!/.vscode/extensions.json
+
+# kaggle tooling artifacts
+kaggle/output/
+scripts/__pycache__/

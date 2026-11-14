@@ -1,0 +1,8 @@
+{
+    // Shared notebook settings for the LosPollos project.
+    "python.defaultInterpreterPath": "${workspaceFolder}/windfarms/bin/python3",
+    "jupyter.notebookFileRoot": "${workspaceFolder}",
+    // outputs arriving from Kaggle runs are shown inline; they are stripped on commit by nbstripout
+    "notebook.outline.showCodeCells": true,
+    "notebook.output.textLineLimit": 30
+}
