@@ -18,14 +18,6 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Prepare Source Refs
-        run: |
-          git for-each-ref --format='update %(refname:strip=3) %(objectname)' \
-            refs/remotes/origin \
-            | git update-ref --stdin
-          git for-each-ref --format='delete %(refname)' refs/remotes/origin \
-            | git update-ref --stdin
-
       - name: Push to Target Repo
         env:
           TARGET_REPO: github.com/${{ vars.MIRROR_TARGET_REPO }}.git
@@ -39,4 +31,7 @@ jobs:
             echo "MIRROR_TARGET_REPO repository variable is not configured" >&2
             exit 1
           fi
-          git push --mirror "https://x-access-token:${TOKEN}@${TARGET_REPO}"
+          git push --prune "https://x-access-token:${TOKEN}@${TARGET_REPO}" \
+            'refs/remotes/origin/*:refs/heads/*' \
+            'refs/heads/*:refs/heads/*' \
+            'refs/tags/*:refs/tags/*'
