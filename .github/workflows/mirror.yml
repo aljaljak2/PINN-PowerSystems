@@ -18,6 +18,12 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - name: Prepare Source Refs
+        run: |
+          git fetch origin '+refs/heads/*:refs/heads/*' --prune
+          git for-each-ref --format='delete %(refname)' refs/remotes/origin \
+            | git update-ref --stdin
+
       - name: Push to Target Repo
         env:
           TARGET_REPO: github.com/${{ vars.MIRROR_TARGET_REPO }}.git
