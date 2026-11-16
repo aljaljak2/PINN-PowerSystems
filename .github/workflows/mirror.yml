@@ -20,7 +20,9 @@ jobs:
 
       - name: Prepare Source Refs
         run: |
-          git fetch origin '+refs/heads/*:refs/heads/*' --prune
+          git for-each-ref --format='update %(refname:strip=3) %(objectname)' \
+            refs/remotes/origin \
+            | git update-ref --stdin
           git for-each-ref --format='delete %(refname)' refs/remotes/origin \
             | git update-ref --stdin
 
