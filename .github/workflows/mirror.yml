@@ -9,11 +9,14 @@ on:
 jobs:
   mirror:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout Source Repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Push to Target Repo
         env:
@@ -28,4 +31,7 @@ jobs:
             echo "MIRROR_TARGET_REPO repository variable is not configured" >&2
             exit 1
           fi
-          git push --mirror "https://x-access-token:${TOKEN}@${TARGET_REPO}"
+          git push --force --prune "https://x-access-token:${TOKEN}@${TARGET_REPO}" \
+            'refs/remotes/origin/*:refs/heads/*' \
+            'refs/heads/*:refs/heads/*' \
+            'refs/tags/*:refs/tags/*'
