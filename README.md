@@ -1,5 +1,7 @@
 # LosPollos
 
+This repository is synchronized with [PINN-PowerSystems](https://github.com/aljaljak2/PINN-PowerSystems).
+
 One notebook (`lospollos.ipynb`), executed on Kaggle's GPUs, edited in VS Code,
 kept in git by 4 collaborators. This repo contains the notebook plus the tooling
 that syncs it with the shared Kaggle kernel.
@@ -245,6 +247,7 @@ any official API for executed notebook outputs.
 | `pull`: *cell count mismatch* | The notebook changed between push and pull (two pushes interleaved). `kg sync`, take the newest code, re-run |
 | `push` refuses with drift warning | Someone pushed meanwhile: `git pull` first, then re-run `kg sync` to inspect; override with `--force` only if you are sure |
 | Run fails on Kaggle | `kg logs` (stderr is what matters), or open the kernel page → output tab |
+| `kg.py` reports `No module named kaggle` after setup | Re-run `./setup.sh`; it checks for the `kaggle.api` module used by the tooling, not only a system `kaggle` namespace |
 | Kernel status stuck `QUEUED` | Kaggle GPU queue or weekly GPU quota exhausted (check kaggle.com → profile → Settings) |
 | Notebook refuses to run locally (`UserSecretsClient`, `/kaggle/working`) | Expected — the notebook targets Kaggle. Use Kaggle for execution |
 | Code OSS kernel picker shows no Python | Make sure the Python + Jupyter extensions are active; if you're on Arch's `code` package with a recent version, the API-proposals whitelist patch may need re-applying after an update |
